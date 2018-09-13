@@ -37,9 +37,7 @@ function reqHttp() {
     });
 }
 
-/* 过滤章节信息 */
 function filterData(html) {
-
     var $ = cheerio.load(html);
     var temp = [];
 
@@ -56,27 +54,26 @@ function filterData(html) {
         data.unitPrice = info.find(".priceInfo").find(".unitPrice span").text();
 
         temp.push(data);
-
     })
     return temp;
 }
 
+// var data =
+//     [
+//         [
+//             'A',
+//             'B'
+//         ],
+//         [
+//             '1',
+//             '2'
+//         ],
+//         [
+//             '3',
+//             '4'
+//         ]
+//     ];
 function saveData() {
-    // var data =
-    //     [
-    //         [
-    //             'A',
-    //             'B'
-    //         ],
-    //         [
-    //             '1',
-    //             '2'
-    //         ],
-    //         [
-    //             '3',
-    //             '4'
-    //         ]
-    //     ];
     var data = [];
     let dat = dataList[0];
     let keys = data[0] = [];
