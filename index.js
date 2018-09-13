@@ -50,7 +50,7 @@ function filterData(html) {
         data.title = info.find(".title").find("a").text();
         data.params = info.find(".address").find(".houseInfo").text();
         data.flood = info.find(".flood").find(".positionInfo").text();
-        // house.address = info.find("flood").find("positionInfo").find("a").html();
+        data.address = info.find(".flood").find(".positionInfo").find("a").text();
         data.followInfo = info.find(".followInfo").text();
         data.totalPrice = info.find(".priceInfo").find(".totalPrice span").text() + "万";
         data.unitPrice = info.find(".priceInfo").find(".unitPrice span").text();
@@ -58,7 +58,6 @@ function filterData(html) {
         temp.push(data);
 
     })
-    // fs.outputFileSync("source.html", temp.);
     return temp;
 }
 
@@ -91,7 +90,7 @@ function saveData() {
         temp.push(i + 1);
         for (let j = 0, len = keys.length; j < len; j++) {
             let key = keys[j];
-            temp.push(dat[key]);
+            if (key != "id") temp.push(dat[key]);
         }
     }
 
