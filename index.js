@@ -3,10 +3,10 @@ var cheerio = require("cheerio");
 var fs = require("fs-extra");
 var xlsx = require("node-xlsx");
 
-var citys = ["beicai", "biyun","caolu","chuansha","datuanzhen","geqing","gaohang","gaodong","huamu","hangtou","huinan",
-"jinqiao","jinyang","kangqiao","lujiazui","laogangzhen","lingangxincheng","lianyang","nichengzhen","nanmatou","sanlin",
-"shibo","shuyuanzhen","tangqiao","tangzhen","waigaoqiao","wanxiangzhen","weifang","xuanqiao","xinchang","yuqiao1","yangdong",
-"yuanshen","yangjing","zhangjiang","zhuqiao","zhoupu"];
+var citys = ["beicai", "biyun", "caolu", "chuansha", "datuanzhen", "geqing", "gaohang", "gaodong", "huamu", "hangtou", "huinan",
+    "jinqiao", "jinyang", "kangqiao", "lujiazui", "laogangzhen", "lingangxincheng", "lianyang", "nichengzhen", "nanmatou", "sanlin",
+    "shibo", "shuyuanzhen", "tangqiao", "tangzhen", "waigaoqiao", "wanxiangzhen", "weifang", "xuanqiao", "xinchang", "yuqiao1", "yangdong",
+    "yuanshen", "yangjing", "zhangjiang", "zhuqiao", "zhoupu"];
 var index = 0;
 var sheetDataMap = {};
 
@@ -72,6 +72,8 @@ function filterData(html) {
         data.followInfo = info.find(".followInfo").text();
         data.totalPrice = info.find(".priceInfo").find(".totalPrice span").text() + "万";
         data.unitPrice = info.find(".priceInfo").find(".unitPrice span").text();
+
+        data.href = info.find(".title").find("a").attr("href");
 
         temp.push(data);
     })
