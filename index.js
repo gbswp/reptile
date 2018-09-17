@@ -3,14 +3,17 @@ var cheerio = require("cheerio");
 var fs = require("fs-extra");
 var xlsx = require("node-xlsx");
 
+var outSheetName = "chunshen";
+var outFileName = "result"
+var maxPage = 10;
+
 var baseUrl = "https://sh.lianjia.com/ershoufang/";
 var index = 1;
-var maxIndex = 10;
 var dataList = [];
 
 function getUrl() {
-    if (index == 1) return baseUrl + "rs/";
-    else return baseUrl + "pg" + index + "/"
+    if (index == 1) return baseUrl + outSheetName + "/rs/";
+    else return baseUrl + outSheetName + "/pg" + index + "/"
 }
 
 function reqHttp() {
@@ -22,7 +25,7 @@ function reqHttp() {
         });
         res.on('end', function () {
             dataList = dataList.concat(filterData(html));
-            if (index >= 10) {
+            if (index >= maxPage) {
                 // fs.outputFileSync("source.json", JSON.stringify(dataList));
                 saveData();
                 return;
@@ -33,7 +36,8 @@ function reqHttp() {
             }, 100)
         });
     }).on('error', function () {
-        console.log('获取数据出错！');
+        // console.log('获取数据出错！');
+        saveData();
     });
 }
 
@@ -46,7 +50,10 @@ function filterData(html) {
         var data = {};
 
         data.title = info.find(".title").find("a").text();
-        data.params = info.find(".address").find(".houseInfo").text();
+        let params = info.find(".address").find(".houseInfo").text().split("|");
+        for (let i = 0, len = params.length; i < len; i++) {
+            data["param" + i] = params[i];
+        }
         data.flood = info.find(".flood").find(".positionInfo").text();
         data.address = info.find(".flood").find(".positionInfo").find("a").text();
         data.followInfo = info.find(".followInfo").text();
@@ -74,6 +81,7 @@ function filterData(html) {
 //         ]
 //     ];
 function saveData() {
+    console.log('开始保存数据！');
     var data = [];
     let dat = dataList[0];
     let keys = data[0] = [];
@@ -91,9 +99,23 @@ function saveData() {
         }
     }
 
-    var obj = [{ "name": "sheet", "data": data }]
+    let obj = [];
+    let filePath = './' + outFileName + ".xlsx";
+    if (fs.existsSync(filePath)) {
+        obj = xlsx.parse(filePath);
+    }
+    // fs.outputFileSync("source.json", JSON.stringify(sourceObj));
+    let isExist = false;
+    for (let temp of obj) {
+        if (temp.name == outSheetName) {
+            temp.data = data;
+            isExist = true;
+        }
+    }
+    !isExist && (obj.push({ "name": outSheetName, "data": data }));
+
     var buffer = xlsx.build(obj);
-    fs.writeFile('./resut.xlsx', buffer, function (err) {
+    fs.writeFile(filePath, buffer, function (err) {
         if (err) throw err;
         console.log('has finished');
     });
