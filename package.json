@@ -18,8 +18,12 @@
   "homepage": "https://github.com/gbswp/reptile#readme",
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
+    "child_process": "^1.0.2",
     "fs-extra": "^7.0.0",
     "https": "^1.0.0",
     "node-xlsx": "^0.12.1"
+  },
+  "devDependencies": {
+    "child_process": "^1.0.2"
   }
 }
