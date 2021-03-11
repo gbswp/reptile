@@ -59,10 +59,14 @@ function cloneRepo() {
             }
             let repoPath = path.join(repoDir, repoName);
             if (!fs.existsSync(repoPath)) {
-                let cmd = `git clone ${ssh_url_to_repo}`;
-                execSync(cmd, { cwd: repoDir, encoding: 'utf8' });
-                progressBar.tick();
-                num++;
+                try {
+                    let cmd = `git clone ${ssh_url_to_repo}`;
+                    execSync(cmd, { cwd: repoDir, encoding: 'utf8' });
+                    progressBar.tick();
+                    num++;
+                } catch (error) {
+                    console.log(`项目${namespaceName}/${repoName}出现克隆异常`)
+                }
             } else {
                 console.log(`目录${namespaceName}/${repoName}已存在`)
             }
